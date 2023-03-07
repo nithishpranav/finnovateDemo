@@ -1,0 +1,348 @@
+<html>
+    <head>
+        <title>
+            Home
+        </title>
+        <style>
+            .nav-right{
+              position: absolute;
+              right: 30px;
+
+            }
+
+            #image-container {
+              width: 200px;
+              height: 200px;
+
+            }
+            #image-container img {
+              width: 200px;
+              height: 200px;
+              position: absolute;   
+            }
+            #token_transaction{
+              max-width: 500px;
+              max-height: 200px;
+            }
+            #nft_transaction{
+              max-width: 500px;
+              max-height: 200px;
+            }
+            #token_transaction_spinner{
+              text-align: center;
+              margin-top: 100px;
+            }
+            #nft_transaction_spinner{
+              text-align: center;
+              margin-top: 100px;
+            }
+            #pie-chart-container{
+              max-width: 570px;
+              max-height: 400px;
+            }
+
+            #pie-chart{
+              max-width: 300px;
+              max-height: 300px;
+            }
+              
+            .container {
+              padding-top: 3%;
+              position: relative;
+              max-width: 500px;
+
+              color: black;
+            }
+            .col {
+              padding: 10px;
+              max-width: 500px;
+            }
+            .row{
+              padding: 10px;
+            }
+            .cell{
+            }
+            
+
+            div {
+  word-wrap: break-word;
+}
+        </style>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.1/chart.min.js"></script>
+    </head>
+
+
+    <body>
+    {% block y %}
+    {% if session.userWID %}
+      <div>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+          <img src='../static/logo/little-blocks-logo.png' alt="Little Blocks Logo" />
+          <div class ="nav-right">
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <a class="nav-link" href="{{ url_for('index') }}">Machine List <span class="sr-only">(current)</span></a>
+              </li>
+              <li class="nav-item">
+                  <li class="nav-item active">
+                <a class="nav-link" href="{{ url_for('createMachine') }}">Create Machine</a>
+              </li>
+              <li class="nav-item">
+                  <a class="nav-link" href="/logout">Log Out</a>
+              </li>
+            </ul>
+
+          </div>
+          </div>
+        </nav>
+      </div>
+      
+      <div class="container">
+        <div class="row">
+          <div class="col" id = "machine">
+            <div class = "cell">
+            <div id = "image-container">
+              <img 
+              src='../static/image/wh1000np.jpg' alt="machine image" id = "machineImage" 
+              
+              />
+            </div>
+            
+            <div>
+              <p>
+
+                CNC Machine
+                <br>
+                <table>
+                  <tr>
+                    <td>Machine ID</td>
+                    <td>wh1000np</td>
+                  </tr>
+                  <tr>
+                    <td>Machine Value</td>
+                    <td>10000 Tokens</td>
+                  </tr>
+                  <tr>
+                    <td>Financier WID</td>
+                    <td>0x5B38Da6a701c568545dCfcB03FcB875f56beddC4</td>
+                  </tr>
+                  <tr>
+                    <td>Manufacturer WID</td>
+                    <td>0xAb8483F64d9C6d1EcF9b849Ae677dD3315835cb2</td>
+                  </tr>
+                  <tr>
+                    <td>Finacier Share</td>
+                    <td>8000 Tokens</td>
+                  </tr>
+                  <tr>
+                    <td>Manufacturer Share</td>
+                    <td>2000 Tokens</td>
+                  </tr>
+                </table>
+              </p>
+              <button type="button" class="btn btn-success"  id = "mint-token-button" onclick="createTokenPool()">
+                Create Token Pool
+              </button>
+              <button class="btn btn-success"  id="mint-token-button-loading" type="button" disabled  style="display: none;">
+                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="false"></span>
+                Loading...
+              </button>
+              <button type="button" class="btn btn-success"  id = "mint-token-button-success" type="button" disabled  style="display: none;">
+                Token Pool Created
+              </button>
+            </div>
+            </div>
+          </div>
+          <div class="col" id = "token">
+            <div id = "token_transaction_div" style="display: none;">
+              <h1>ERC-20 Token Pool Created</h1>
+              <pre id = "token_transaction">
+              </pre>
+              <table>
+                <tr>
+                  <td>Token Pool Address</td>
+                  <td>0x5B38Da6a701c568545dCfcB03FcB875f56beddC4</td>
+                </tr>
+                <tr>
+                  <td>Token Pool Value</td>
+                  <td>10000 Tokens</td>
+                </tr>
+                <tr>
+                  <td>
+                    NFT Token ID
+                  </td>
+                  <td>
+                    wh1000np
+                  </td>
+                </tr>
+              </table>
+              <br>
+              <button
+              type="button"
+              class="btn btn-success"
+              id="mint-nft-button"
+              onclick="mintNFT()"
+              style="display: none;"
+            >
+              Mint NFT
+            </button>
+            </div>    
+            <div id = "token_transaction_spinner" style="display: none;">
+              <div    class="spinner-border" style="width: 7rem; height: 7rem;" role="status" >
+                <span class="sr-only">Creating Token Pool...</span>
+                
+              </div>
+              <p>Creating Token Pool...</p>
+            </div>
+
+            </pre>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col" id = "pie-chart-container">
+            <div id = "pie-chart">
+              <canvas name = "pieChart" id="pieChart" 
+              width:300px !important; 
+              height:300px !important;
+              >
+            </div>
+            <!-- <button type="button" class="btn btn-success"  id = "mint-token-button" onclick="createTokenPool()">
+              Create Token Pool
+            </button>
+            <button class="btn btn-success"  id="mint-token-button-loading" type="button" disabled  style="display: none;">
+              <span class="spinner-border spinner-border-sm" role="status" aria-hidden="false"></span>
+              Loading...
+            </button>
+            <button type="button" class="btn btn-success"  id = "mint-token-button-success" type="button" disabled  style="display: none;">
+              Token Pool Created
+            </button> -->
+          </div>
+          <div class="col">
+
+
+            <div id = nft_transaction_container style="display: none;">
+              <h1>NFT Token Minted</h1>
+              <pre 
+                id = "nft_transaction">
+              </pre>
+            </div>
+            <div id = "nft_transaction_spinner" style="display: none;">
+              <div    class="spinner-border" style="width: 7rem; height: 7rem;" role="status" >
+                <span class="sr-only">Minting NFT...</span>
+                
+              </div>
+              <p>Minting NFT...</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    {% else %}
+        You are not Register. <a href="/login">login</a>.
+    {% endif %}
+    
+    {% endblock %}
+    </body>
+
+    <script>
+      var myPieChart = null
+      var config = {
+        options:{
+              responsive:true,
+              rotation: -90,
+              circumference: 180,
+        },
+        type:'pie'}
+
+      var tokenTranasction = {
+        "logIndex":1,
+        "blockNumber":3,
+        "blockHash":"0xb6b635ed233172934d4bf619f6241909b2fd445ea48d398f84a953e1ba2b2695",
+        "transactionHash":"0xe0cb255f7c79e16e060a17e49ecdfe91b1df557b8e7b658ad5e699bff864399a",
+        "transactionIndex":0,
+        "address":"0xd8b934580fcE35a11B58C6D73aDeE468a2833fa8",
+        "id":"log_060cec56",
+        "string _machineID": "wh1000np",
+        "uint256 _amount": "10000",
+        "address _financierWID": "0x5B38Da6a701c568545dCfcB03FcB875f56beddC4",
+        "address _manufacturerWID": "0xAb8483F64d9C6d1EcF9b849Ae677dD3315835cb2",
+        "uint256 _finacierShare": "8000",
+        "uint256 _manufacturerShare": "2000"
+      }
+
+      var nftTransaction= {
+        'status':'true Transaction mined and execution succeed',
+        'transaction hash':'0xb1b68b4d6118f6957225e93fdf79ebf4f8400a4d5ff7791a7bbeab55d3b82cdc',
+        'from':'0x5B38Da6a701c568545dCfcB03FcB875f56beddC4',
+        'to':'MyNFT.safeMint(address,uint256) 0xd9145CCE52D386f254917e481eB44e9943F39138',
+        'gas':'83007 gas',
+        'transaction cost':'72180 gas', 
+        'execution cost':'50608 gas', 
+        "address to": "0x5B38Da6a701c568545dCfcB03FcB875f56beddC4",
+        "uint256 tokenId": "1"
+        
+      }
+
+      document.getElementById("token_transaction").innerHTML = JSON.stringify(tokenTranasction, null, 2);
+      document.getElementById("nft_transaction").innerHTML = JSON.stringify(nftTransaction, null, 2);
+
+      function createTokenPool() {
+        document.getElementById("mint-token-button").style.display = "none";
+        document.getElementById("mint-token-button-loading").style.display = "block";
+        document.getElementById("token_transaction_spinner").style.display = "block";
+
+        setTimeout(function() {
+          document.getElementById("token_transaction_spinner").style.display = "none";
+          document.getElementById("mint-token-button-loading").style.display = "none";
+          document.getElementById("token_transaction_div").style.display = "block";
+          document.getElementById("mint-nft-button").style.display = "block";
+         // document.getElementById("nft_transaction").style.display = "block";
+
+        }, 3000); 
+      }
+
+      function mintNFT() {
+        document.getElementById("mint-nft-button").style.display = "none";
+        // document.getElementById("mint-nft-button-loading").style.display = "block";
+        document.getElementById("nft_transaction_spinner").style.display = "block";
+
+        setTimeout(function() {
+          document.getElementById("nft_transaction_spinner").style.display = "none";
+          // document.getElementById("mint-nft-button-loading").style.display = "none";
+          // document.getElementById("mint-nft-button-success").style.display = "block";
+          // document.getElementById("nft_transaction_div").style.display = "block";
+          document.getElementById("nft_transaction_container").style.display = "block";
+          pchart (8000,2000);
+
+        }, 3000); 
+      }
+
+
+
+      function pchart(ftb,mtb) {
+          var ftb = ftb,
+            mtb = mtb,
+            ctx = document.getElementById('pieChart').getContext('2d');
+                        config.data = {
+            labels: ["Financier","Manufacturer"],
+            datasets:
+                [{
+                  data: [ftb,mtb],
+                  backgroundColor: ["#a64d79", "#3d85c6"],
+                }]
+          };
+          if(myPieChart == null){
+                            myPieChart = new Chart(ctx, config);
+                        }else{
+                            myPieChart.update()
+                        }
+      }
+    </script>
+</html>
