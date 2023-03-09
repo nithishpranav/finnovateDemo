@@ -23,12 +23,12 @@ async function getTransactions(){
 
     var requestOptions = {
     method: 'POST',
-    mode: 'cors',
+    mode: 'no-cors',
     headers: myHeaders,
     body: raw,
     redirect: 'follow'
     };
-    const res = await fetch("http://localhost:5000/getTransactions", requestOptions)
+    const res = await fetch("http://localhost:5000/getTransactions")
     .then(res => res.json())
     .then(
         result => {

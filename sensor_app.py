@@ -245,17 +245,18 @@ Transaction Page API
     read machine usage from database using Machine Contract Address
 """
 #read machine usage from database using Machine Contract Address
-@app.route('/getTransactions', methods=['POST'])
+@app.route('/getTransactions', methods=["POST", "GET"])
 def mongo_read():
-    data = request.json
-    dataJson = jsonify(data)
-    filter = data["filter"]
-    print(filter["machineID"])
+    
+    # data = request.json
+    # dataJson = jsonify(data)
+    filter = "testMachine10"
+    # print(filter["machineID"])
     #print(dataJson)
-    if data is None or data == {}:
-        return Response(response=json.dumps({"Error": "Please provide connection information"}),
-                        status=400,
-                        mimetype='application/json')
+    # if data is None or data == {}:
+    #     return Response(response=json.dumps({"Error": "Please provide connection information"}),
+    #                     status=400,
+    #                     mimetype='application/json')
     #response = [{"jsonStr": {"blockHash": "0xcacb00edb9e8bb89683f1932c96f1416f1c385d8098a06f43e3d99f9b5372a38", "blockNumber": "873519", "cumulativeGasUsed": "70031", "dayStamp": "testMachine10:2021-03-11", "from": "0x81db5f1e9d7fdd3bb8ca2ec20edb4dbd2f58b8a8", "gasUsed": "70031", "headers": {"id": "e6977ff7-5df1-4e2b-5d69-6163f5e993db", "requestId": "0383a570-8b08-4a88-799b-320fb02a0c6b", "requestOffset": "", "timeElapsed": 4.516024203, "timeReceived": "2023-03-06T12:30:53.200918569Z", "type": "TransactionSuccess"}, "machineID": "testMachine10", "monthStamp": "testMachine10:-03-11", "nonce": "0", "status": "1", "timeStamp": "testMachine10:2021-03-11", "to": "0x17dfd393f35a889702c9c4530757e82e5052fb35", "transactionHash": "0x28b1bdc7fcbe3aa1782cd90875532d08dde7e4fbd5e5f0a2ded4cc66d2892446", "transactionIndex": "0", "usage": "55"}}, {"jsonStr": {"blockHash": "0xb4a8143633c93b755cb67eb7cbd3eb6e5c3bb1864fd7c3cec87c6336f8cb60e0", "blockNumber": "873520", "cumulativeGasUsed": "59279", "dayStamp": "testMachine10:2021-03-11", "from": "0x81db5f1e9d7fdd3bb8ca2ec20edb4dbd2f58b8a8", "gasUsed": "59279", "headers": {"id": "1eb26c7a-d8fc-4826-57e4-230a1e7d70b5", "requestId": "a1b6cf1e-1410-4077-73fc-d65be2648e8a", "requestOffset": "", "timeElapsed": 4.508500977, "timeReceived": "2023-03-06T12:31:03.2010915Z", "type": "TransactionSuccess"}, "machineID": "testMachine10", "monthStamp": "testMachine10:-03-11", "nonce": "0", "status": "1", "timeStamp": "testMachine10:2021-03-11 NaN", "to": "0x17dfd393f35a889702c9c4530757e82e5052fb35", "transactionHash": "0x9447d77e58620b8b609ca77d5b041b243144415035d33e94fc84d7970f3cca5d", "transactionIndex": "0", "usage": "53"}}]
 
 
@@ -266,13 +267,11 @@ def mongo_read():
         for key, value in x.items():
             if(key == "jsonStr"):
                 #print(type(value))
-                if isinstance(value, dict):
-                    if(value.get('machineID') == filter["machineID"]):
+
                         #print(value.get('machineID'))
                         result.append(x)
                         continue
-                else:
-                    print('The value is NOT a dictionary')
+
     return Response(response=json.dumps(result),
                     status=200,
                     mimetype='application/json')
