@@ -52,6 +52,7 @@
     >
         <!--Modal-->
     <style>
+
         .btn-purple {
         color: #fff;
         background-color: #6f42c1;
@@ -81,6 +82,19 @@
         width: 60px;
         height: 60px;
         padding: 10%;
+        border: 16px solid #f3f3f3;
+        border-radius: 50%;
+        border-top: 16px solid #3498db;
+        margin-top: 10%;
+        -webkit-animation: spin 2s linear infinite;
+        animation: spin 2s linear infinite;
+      }
+
+      #pl{
+        z-index: 1;
+        width: 60px;
+        height: 60px;
+        padding: 5%;
         border: 16px solid #f3f3f3;
         border-radius: 50%;
         border-top: 16px solid #3498db;
@@ -159,12 +173,23 @@
 
       <!--Dashboard-->
       <div id = "dashboard">
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: black;">
           <div class="navbar-nav mr-auto">
-  
-            <img src='../static/logo/little-blocks-logo.png' alt="Little Blocks Logo" />
+            <img 
+            src='../static/logo/littleblocks_logo_black.jpg' 
+            alt="Little Blocks Logo" 
+            style="width: 240px; height: 90px"
+            />
             </div>  
-            <a class="navbar-brand" href="#">{{ session.machineID }} </a>
+            <div class="navbar-nav mr-auto">
+              <a 
+              class="navbar-brand" 
+              href="#"
+              style="color: #68b0df;"
+              >
+              {{ session.machineID }} 
+              </a>
+              </div>  
           <div class = 'nav-right'>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
               <ul class="navbar-nav">
@@ -206,33 +231,40 @@
         <!--Machine Details-->      
         <div id = "transferContainercd" class="grid-container"> 
           <div class="hero">
-            <table>
+            <table class = "content">
               <tr>
                 <th>Machine ID</th>
+                <td style ="color: #EEEE; width: fit-content;">a</td>
                 <td id = "machine_id">{{ session.machineID }}</td>
               </tr>
               <tr>
                 <th>Machine Value</th>
+                <td style ="color: #EEEE; width: fit-content;">a</td>
                 <td id = "machine_value"></td>
               </tr>
             </table>
             <br>
             <br>
-            <table>
+            <table  class = "content">
               <tr>
                 <th>Financier Wallet ID</th>
+                <td style ="color: #EEEE; width: fit-content;">a</td>
                 <td id = "financier_wallet_id"></td>
               </tr>
               <tr>
                 <th>Financier Token Balance</th>
+                <td style ="color: #EEEE; width: fit-content;">a</td>
                 <td id ="ftb"></td>   
               </tr>
               <tr>
                 <th>Manufacturer Wallet ID</th>
+                <td style ="color: #EEEE; width: fit-content;">a</td>
                 <td id="manufacturer_wallet_id"></td>
               </tr>
               <tr>
                 <th>Manufacturer Token Balance</th>
+                <td style ="color: #EEEE; width: fit-content;">a</td>
+
                 <td id="mtb"></td>
               </tr>
             </table>
@@ -255,42 +287,88 @@
             <div id="billContainer">
             <div class ="b" id = "generateBill">
               <center>
-              <input type="date" id="from_date" placeholder="From">
-              <input type="date" id="to_date" placeholder="To">
-              <button onclick="generateBill()">Generate Bill</button>
+              <input 
+              type="date" 
+              id="from_date" 
+              placeholder="From"
+              style = "border-radius: 5px; border-width: 1px; border-color: rgb(0, 0, 0);"
+              >
+              <input 
+              type="date" 
+              id="to_date" 
+              placeholder="To"
+              style = "border-radius: 5px; border-width: 1px; border-color: rgb(0, 0, 0);"
+            
+
+              >
+              <button type="button" class="btn btn-primary btn-sm" style="background-color:  rgb(48, 129, 57);"   onclick="generateBill()">Generate Bill</button>
             </center>
             </div>
             <div class = 'b' id = "bill">
               <span class = "close" onclick="closeGeneratedBill()"> &times; </span>
               <center>
               <br>
-                <table>
+                <table  class = "content">
                 <tr>
-                  <th>  Machine Usage</th>
-                  <td id = bill_usage></td>
+                  <th>Usage  </th>
+                  <td style ="color: #EEEE; width: fit-content;">a</td>
+                  <td><a style ="color: #EEEE; width: fit-content;"></a> <a id = bill_usage></a> hours</td>
                 </tr>
                 <tr>
-                  <tH>Month Due</tH>
-                  <td id = bill_cost></td>
+                  <tH>Due</tH>
+                  <td style ="color: #EEEE; width: fit-content;">a</td>
+                  <td>$<a id = bill_cost></a></td>
+                  
                 </tr>
                 </table>
                 <br>
-                <button onclick="payBill()">Settle Amount</button>
+                <button type = "button"  class="btn btn-primary btn-sm" style="background-color: rgb(48, 129, 57);" onclick="payBill()">Settle Amount</button>
                 <br><br><br>
               </center>
             </div>
+            <div id = "paymentLoader" style="display: none;">
+                <center>
+                  <p>Transferring Tokens</p>
+                  <div class = 'b' id = "pl">
+                
+                  </div>
+                </center>
+            </div>
+            <div id="paymentSuccess" style="display: none;">
+              <center>
+                <p id ="paymentSuccessMessage">Payment Successful</p>
+                <button type = "button"  class="btn btn-primary btn-sm" style="background-color: rgb(12, 112, 24);" onclick="closePaymentSuccess()">Close</button>
+              </center>
+            </div>
+            
+          </div>
           </div>
           </div>
         </div>
       </div>
 
       <div id="transactionPageContainer">
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-          <div class="navbar-nav mr-auto">
-  
-            <img src='../static/logo/little-blocks-logo.png' alt="Little Blocks Logo" />
-            </div>  
-            <a class="navbar-brand" href="#">{{ session.machineID }} </a>
+        <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: black;">
+          <div class="navbar-nav mr-auto">  
+            <img 
+            src='../static/logo/littleblocks_logo_black.jpg' 
+            alt="Little Blocks Logo" 
+            style="width: 240px; height: 90px"
+            />
+            </div>   
+
+            <div class="navbar-nav mr-auto">  
+              <a 
+              class="navbar-brand" 
+              href="#"
+              style="color: #68b0df;"
+              >
+              {{ session.machineID }} 
+              </a>
+            </div>   
+            
+            
+
           <div class = 'nav-right'>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
               <ul class="navbar-nav">
@@ -420,6 +498,11 @@
     
     var dayChartBiggerFlag = false;
     var metricsChartBiggerFlag = false;
+      
+    function closePaymentSuccess(){
+      document.getElementById("paymentSuccess").style.display = "none";
+    }
+
     function dayChartBigger(){
       if(dayChartBiggerFlag == false){
         document.getElementById("metricsChart").style.display = "none";
@@ -496,18 +579,22 @@
     function machineDetailsPart2(machine_id,userWID){
         console.log("machineID: "+machine_id);
         console.log("user wallet: "+userWID);
-        document.getElementById("machine_value").innerHTML = "100000000";
+        machineValue = 50000
+        const formattedNumber = machineValue.toLocaleString("en-US");
+        document.getElementById("machine_value").innerHTML = formattedNumber;
         document.getElementById("financier_wallet_id").innerHTML = "0x81db5f1e9d7fdd3bb8ca2ec20edb4dbd2f58b8a8";
         document.getElementById("manufacturer_wallet_id").innerHTML = "0x5c67f66e617cf85bc7ef9347994104ae6239a032";
         document.getElementById("dashboard").style.display = "block";
 
-        getAddressBalance(machine_id, userWID, fwid, mwid, 80000000, 20000000);
+        getAddressBalance(machine_id, userWID, fwid, mwid, 40000, 10000);
 
   
     }
 
     function getAddressBalance(machine_id, userWID, fwid, mwid, f_balance, m_balance){
         pchart(f_balance,m_balance);
+        f_balance = f_balance.toLocaleString("en-US");
+        m_balance = m_balance.toLocaleString("en-US");
         document.getElementById("ftb").innerHTML = f_balance;
         document.getElementById("mtb").innerHTML = m_balance;
         console.log("machineDetailsPart2");

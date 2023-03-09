@@ -3,7 +3,6 @@ from flask import Flask, json,Response, render_template, redirect, request, sess
 import requests
 from flask_session import Session
 from flask_socketio import SocketIO
-from pymongo import MongoClient
 import logging as log
 from random import random
 from threading import Lock
@@ -159,15 +158,15 @@ def lastMachineMetrics():
     machineID = session["machineID"]
     dateFile = pathlib.Path("./state/"+machineID+"date.csv")
 
-    if(dateFile.exists()):
-        f = open(dateFile, 'r')
-        date = f.readline()
-        f.close()
-    else:
-        f = open(dateFile, 'w')
-        f.write("2021-01-01 00") 
-        f.close()
-        date = "2021-01-01 00"
+    # if(dateFile.exists()):
+    #     f = open(dateFile, 'r')
+    #     date = f.readline()
+    #     f.close()
+    # else:
+    #     f = open(dateFile, 'w')
+    #     f.write("2021-01-01 00") 
+    #     f.close()
+    date = "2023-01-01 00"
 
     if request.method == "GET":
         info = {

@@ -24,6 +24,8 @@ const { json } = require("body-parser");
 function generateBill(){
     document.getElementById("billContainer").style.display = "none";
     document.getElementById("billContainerLoader").style.display = "block";
+    document.getElementById("paymentSuccess").style.display = "none";
+
 
     console.log("machineDetails");
     fetch('/getInfo')
@@ -88,7 +90,7 @@ function generateBill(){
 
     var from_date = document.getElementById("from_date").value;
     var to_date = document.getElementById("to_date").value;
-    var per_hour_usage = 10;
+    var per_hour_usage = 2.5;
 
     console.log("from_date"+from_date);
     console.log("to_date"+to_date);
@@ -125,7 +127,7 @@ function generateBill(){
     //totalUsage = totalUsage/60;
     console.log("totalUsage"+totalUsage);
     totalUsage = parseInt(totalUsage);
-    var bill = totalUsage*per_hour_usage;
+    var bill = Math.round(totalUsage*per_hour_usage);
     //bill = parseInt(bill);
     document.getElementById("bill_usage").innerHTML = totalUsage;
     document.getElementById("bill_cost").innerHTML = bill;
@@ -191,17 +193,19 @@ function generateBill(){
 
 
   async function payBill(){
-    document.getElementById("main").style.display = "none";
-    document.getElementById("l").style.display = "block";
-    document.getElementById("loader").style.display = "block";
+    document.getElementById("bill").style.display = "none";
+    document.getElementById("paymentLoader").style.display = "block";
+    document.getElementById("paymentSuccess").style.display = "none";
+
+    //document.getElementById("loader").style.display = "block";
 
 
     var amount = document.getElementById("bill_cost").innerHTML;
     var sender = document.getElementById("financier_wallet_id").value;
     var recipient = document.getElementById("manufacturer_wallet_id").value;
 
-    f_balance = parseInt(document.getElementById("ftb").innerHTML);
-    m_balance = parseInt(document.getElementById("mtb").innerHTML);
+    f_balance = parseInt(document.getElementById("ftb").innerHTML.replace(/,/g, ''));
+    m_balance = parseInt(document.getElementById("mtb").innerHTML.replace(/,/g, ''));
     f_balance = f_balance - parseInt(amount);
     m_balance = m_balance + parseInt(amount);
 
@@ -209,8 +213,9 @@ function generateBill(){
     console.log("m_balance"+m_balance);
 
     const sleep = ms => new Promise(r => setTimeout(r, ms));
-    await sleep(5000);
-
+    await sleep(3000);
+    
+    var paymentSuccssMsg = amount+" tokens transferred successfully";
     var machine_id
     var userWID
     console.log("machineDetails");
@@ -221,9 +226,10 @@ function generateBill(){
         machine_id = data.machineID;
         userWID = data.userWID;
         setTimeout(() => getAddressBalance(machine_id, userWID, fwid, mwid, f_balance, m_balance), 1000);
-        document.getElementById("main").style.display = "block";
-        document.getElementById("l").style.display = "none";
         document.getElementById("bill").style.display = "none";
+        document.getElementById("paymentSuccessMessage").innerHTML = paymentSuccssMsg;
+        document.getElementById("paymentLoader").style.display = "none";
+        document.getElementById("paymentSuccess").style.display = "block";
       })
       .catch(error => console.log('error', error)); 
 
@@ -259,9 +265,9 @@ function generateBill(){
       .then(response => response.text())
       .then(result => {
         console.log(result);
-        setTimeout(() => getAddressBalance(machine_id, userWID, sender, recipient), 6000);
-        document.getElementById("main").style.display = "block";
-        document.getElementById("l").style.display = "none";
+        setTimeout(() => getAddressBalance(machine_id, userWID, sender, recipient), 3000);
+        document.getElementById("bill").style.display = "block";
+        document.getElementById("paymentLoader").style.display = "none";
 
       })
       .catch(error => console.log('error', error));

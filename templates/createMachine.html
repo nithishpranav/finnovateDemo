@@ -83,8 +83,12 @@
     {% block y %}
     {% if session.userWID %}
       <div>
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-          <img src='../static/logo/little-blocks-logo.png' alt="Little Blocks Logo" />
+        <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: black;">
+          <img 
+          src='../static/logo/littleblocks_logo_black.jpg' 
+          alt="Little Blocks Logo" 
+          style="width: 240px; height: 90px"
+          />
           <div class ="nav-right">
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
@@ -127,7 +131,7 @@
                   </tr>
                   <tr>
                     <td>Machine Value</td>
-                    <td>10000 Tokens</td>
+                    <td>50,000 Tokens</td>
                   </tr>
                   <tr>
                     <td>Financier WID</td>
@@ -139,11 +143,11 @@
                   </tr>
                   <tr>
                     <td>Finacier Share</td>
-                    <td>8000 Tokens</td>
+                    <td>40,000 Tokens</td>
                   </tr>
                   <tr>
                     <td>Manufacturer Share</td>
-                    <td>2000 Tokens</td>
+                    <td>10,000 Tokens</td>
                   </tr>
                 </table>
               </p>
@@ -172,7 +176,7 @@
                 </tr>
                 <tr>
                   <td>Token Pool Value</td>
-                  <td>10000 Tokens</td>
+                  <td>50,000 Tokens</td>
                 </tr>
                 <tr>
                   <td>
@@ -270,11 +274,11 @@
         "address":"0xd8b934580fcE35a11B58C6D73aDeE468a2833fa8",
         "id":"log_060cec56",
         "string _machineID": "wh1000np",
-        "uint256 _amount": "10000",
+        "uint256 _amount": "50,000",
         "address _financierWID": "0x5B38Da6a701c568545dCfcB03FcB875f56beddC4",
         "address _manufacturerWID": "0xAb8483F64d9C6d1EcF9b849Ae677dD3315835cb2",
-        "uint256 _finacierShare": "8000",
-        "uint256 _manufacturerShare": "2000"
+        "uint256 _finacierShare": "40,000",
+        "uint256 _manufacturerShare": "10,000"
       }
 
       var nftTransaction= {
@@ -319,7 +323,7 @@
           // document.getElementById("mint-nft-button-success").style.display = "block";
           // document.getElementById("nft_transaction_div").style.display = "block";
           document.getElementById("nft_transaction_container").style.display = "block";
-          pchart (8000,2000);
+          pchart (40000,10000);
 
         }, 3000); 
       }

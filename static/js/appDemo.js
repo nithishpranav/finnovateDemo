@@ -7,7 +7,7 @@ async function startServer(machineID, userWID,financierWalletID, manufacturerWal
     console.log("demo server started")
     var financierWID = financierWalletID
     var manufacturerWID = manufacturerWalletID
-    const MAX_DATA_COUNT = 100;
+    const MAX_DATA_COUNT = 34;
     var socket = io.connect();
   
     var populateDayChartFlag = true ;
@@ -22,22 +22,51 @@ async function startServer(machineID, userWID,financierWalletID, manufacturerWal
         datasets: [
   
           { label: "Voltage",
-            borderColor: ['rgba(25, 119, 12, 1)',],
+          backgroundColor: ['rgba(25, 119, 12, 1)',],
+          borderColor: ['rgba(25, 119, 12, 1)',],
           },
           {
             label: "Rotation",
+            backgroundColor: ['rgba(255, 99, 132, 1)',],
             borderColor: ['rgba(255, 99, 132, 1)',],
           },
           {
             label: "Vibration",
+            backgroundColor: ['rgba(115, 9, 122, 1)',],
             borderColor: ['rgba(115, 9, 122, 1)',],
           },
           {
             label: "Pressure",
+            backgroundColor: ['rgba(215, 119, 12, 1)',],
             borderColor: ['rgba(215, 119, 12, 1)',],
           }
         ],
+      },
+      options:{
+        plugins: {
+          legend: {
+              labels: {
+                  // This more specific font property overrides the global property
+                  font: {
+                      size: 10
+                  },
+                  
+
+              }
+
+          }
+      },
+        scales: {
+          x: {
+            ticks: {
+              font: {
+                  size: 10,
+              }
+
+          }
+        },
       }
+    }
     });
     const dayUsageChart = new Chart(duc,{
       type: "bar",
@@ -61,7 +90,14 @@ async function startServer(machineID, userWID,financierWalletID, manufacturerWal
             title: {
               display: true,
               text: 'Date'
-            }
+            },
+            ticks: {
+              font: {
+                  size: 10,
+              }
+          }
+
+ 
           }
         }     
       }
@@ -74,6 +110,7 @@ async function startServer(machineID, userWID,financierWalletID, manufacturerWal
         startDate = data.date;
       })
     time_stamp = startDate;
+    labelTimeStamp = time_stamp;
     console.log(startDate);
   
     if(populateDayChartFlag){
@@ -87,13 +124,13 @@ async function startServer(machineID, userWID,financierWalletID, manufacturerWal
       min = 90;
       volt_value = Math.random() * (170 - 160) + 160;
       rotate_value = Math.random() * (420 - 380) + 380;
-      vibration_value = Math.random() * (max - min) + min;
+      vibration_value = Math.random() * (200 - 180) + 180;
       pressure_value = Math.random() * (max - min) + min;
       //console.log("Received sensorData :: " + time_stamp + " :: " + volt_value+" :: " + rotate_value+"::" + vibration_value+"::" + pressure_value);
       if (myChart.data.labels.length > MAX_DATA_COUNT) {
         removeFirstData();
       }
-      addData(time_stamp,volt_value,rotate_value,vibration_value,pressure_value);
+      addData(labelTimeStamp,volt_value,rotate_value,vibration_value,pressure_value);
       //update date
       var dateYear = parseInt(time_stamp.slice(0,4));
       var dateMonth = parseInt(time_stamp.slice(5,7));
@@ -125,6 +162,13 @@ async function startServer(machineID, userWID,financierWalletID, manufacturerWal
         day = nextDate.getDate();
       var temp = (nextDate.getFullYear()+'-'+month+'-'+day);
       time_stamp = temp+" "+hour;
+
+      if(hour == '00'){
+        labelTimeStamp = time_stamp;
+      }
+      else{
+        labelTimeStamp = time_stamp.slice(11,13);
+      }
       //console.log("next day "+time_stamp);
       
       //write timestamp to file
@@ -164,7 +208,8 @@ async function startServer(machineID, userWID,financierWalletID, manufacturerWal
         dataset.data.shift();
       });
     }
-  
+    
+
     function addData(label, volt_data, rotate_data, vibration_data, pressure_data) {
       myChart.data.labels.push(label);
       myChart.data.datasets[0].data.push(volt_data);
@@ -352,14 +397,27 @@ async function startServer(machineID, userWID,financierWalletID, manufacturerWal
       //console.log(time_stamp);
       
       var from = new Date(t);
-      from.setDate(from.getDate()-3);
+      from.setDate(from.getDate()-2);
       hour = (hour+72)%24;
       console.log(from);
-  
+
+      day = from.getDate();
+      month = from.getMonth()+1;
+      year = from.getFullYear();
+      time_stamp = year+'-'+month+'-'+day+" "+hour;
+
+      
       for (var i = 0; i < 48; i++) {
         if(hour < 10){
-          hour = "0"+parseInt(hour)+1;
+          hour = parseInt(hour)+1;
+          time_stamp = time_stamp.slice(0,10)+" "+"0"+hour;
+
         }
+        else if(hour >= 10 && hour < 23){
+          hour = parseInt(hour)+1;
+          time_stamp = time_stamp.slice(0,10)+" "+hour;
+        }
+
         else if(hour == 23){
           day = from.getDate();
           month = from.getMonth()+1;
@@ -373,24 +431,30 @@ async function startServer(machineID, userWID,financierWalletID, manufacturerWal
             month = '0'+month;
           }
           time_stamp = year+'-'+month+'-'+day+" "+hour;
+          
+          hour = 0;
+        }
+        
+        if(hour == 1){
+          labelTimeStamp = time_stamp;
         }
         else{
-          hour = parseInt(hour)+1;
+          labelTimeStamp = time_stamp.slice(11,13);
         }
-        time_stamp = time_stamp.slice(0,10)+" "+hour;
+        console.log(time_stamp);
         //time_stamp = from.getFullYear()+'-'+(from.getMonth()+1)+'-'+from.getDate()+" "+hour;
         
         max = 100;
         min = 90;
         volt_value = Math.random() * (170 - 160) + 160;
         rotate_value = Math.random() * (420 - 380) + 380;
-        vibration_value = Math.random() * (max - min) + min;
+        vibration_value = Math.random() * (200 - 180) + 180;
         pressure_value = Math.random() * (max - min) + min;
         //console.log("Received sensorData :: " + time_stamp + " :: " + volt_value+" :: " + rotate_value+"::" + vibration_value+"::" + pressure_value);
         if (myChart.data.labels.length > MAX_DATA_COUNT) {
           removeFirstData();
         }
-        myChart.data.labels.push(time_stamp);
+        myChart.data.labels.push(labelTimeStamp);
         myChart.data.datasets[0].data.push(volt_value);
         myChart.data.datasets[1].data.push(rotate_value);
         myChart.data.datasets[2].data.push(vibration_value);
@@ -473,7 +537,7 @@ async function startServer(machineID, userWID,financierWalletID, manufacturerWal
           month = '0'+month;
         }
         time_stamp = machine_id+":"+year+'-'+month+'-'+day;
-        day = day+'-'+month+'-'+year;
+        day = year+'-'+month+'-'+day;
         dayUsage =Math.random() * (23*60 - 16*60) + 16*60;
         addDayUsageData(day,dayUsage);
         //const result = await getDayUsageDataFromDB(machine_id,day,time_stamp);
