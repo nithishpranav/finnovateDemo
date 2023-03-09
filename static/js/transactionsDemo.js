@@ -28,7 +28,7 @@ async function getTransactions(){
     body: raw,
     redirect: 'follow'
     };
-    const res = await fetch("http://localhost:5000/getTransactions")
+    const res = await fetch("/getTransactions")
     .then(res => res.json())
     .then(
         result => {

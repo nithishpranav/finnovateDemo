@@ -182,9 +182,9 @@ async function startServer(machineID, userWID,financierWalletID, manufacturerWal
         }),
         body: JSON.stringify(updateTimeStampData)
       }
-      fetch('/updateMachineMetricsDate',requestOptions)
-        .then(response => response.json())
-        .catch(error => console.log('error', error));
+      // fetch('/updateMachineMetricsDate',requestOptions)
+      //   .then(response => response.json())
+      //   .catch(error => console.log('error', error));
     }
     );
   
