@@ -233,7 +233,7 @@ def disconnect():
 """
 Database API
     Dashboard Page API
-    Transaction Page API
+    Transac tion Page API
 """
 
 """
